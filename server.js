@@ -7,6 +7,9 @@ const mongoose = require("mongoose"); //require mongoose db; allows for object d
 const methodOverride = require("method-override"); //method-override package: for spoofing HTTP methods
 require("dotenv").config(); //require .env file; allows for process.env.some_const_inside_env_goes_here syntax to be used
 
+//require controllers
+const logsController = require("./controllers/logsController");
+
 //add views templating engine
 app.set("view engine", "jsx");
 app.engine("jsx", jsxEngine());
@@ -37,117 +40,9 @@ app.get("/", (req, res) => {
   res.send("Welcome to Captain's Log App");
 });
 
-//seed route
-app.get("/logs/seed", (req, res) => {
-  Log.create([
-    {
-      title: "title1",
-      entry: "entry1",
-      shipIsBroken: true,
-    },
-    {
-      title: "title2",
-      entry: "entry2",
-      shipIsBroken: false,
-    },
-    {
-      title: "title3",
-      entry: "entry3",
-    },
-  ])
-    .then(() => {
-      res.redirect("/logs");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-});
-
-//logs index
-app.get("/logs", async (req, res) => {
-  try {
-    const logs = await Log.find();
-    res.render("Index", { logs: logs });
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-//logs new
-app.get("/logs/new", (req, res) => {
-  res.render("New");
-});
-
-//logs delete
-try {
-  app.delete("/logs/:id", async (req, res) => {
-    await Log.findByIdAndRemove(req.params.id);
-    res.redirect("/logs"); //redirect back to logs index
-  });
-} catch (error) {
-  console.log(error);
-}
-
-//logs update
-app.put("/logs/:id", (req, res) => {
-  if (req.body.shipIsBroken === "on") {
-    req.body.shipIsBroken = true;
-  } else {
-    req.body.shipIsBroken = false;
-  }
-  Log.findByIdAndUpdate(req.params.id, req.body)
-    .then((updatedLog) => {
-      console.log(updatedLog);
-      res.redirect(`/logs/${req.params.id}`); //redirect to the Show page
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
-});
-
-//logs create
-app.post("/logs", async (req, res) => {
-  try {
-    if (req.body.shipIsBroken === "on") {
-      //if ready to eat is checked by user
-      req.body.shipIsBroken = true; //do some data correction
-    } else {
-      //if ready to eat is not checked by user
-      req.body.shipIsBroken = false; //do some data correction
-    }
-
-    //store new log in cloud db
-    await Log.create(req.body);
-
-    res.render("Show", { log: req.body }); //redirect to show route
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-//logs edit
-app.get("/logs/:id/edit", async (req, res) => {
-  await Log.findById(req.params.id)
-    .then((foundLog) => {
-      res.render("Edit", {
-        log: foundLog, //pass in the foundLog so we can use it to populate the form
-      });
-    })
-    .catch((err) => {
-      res.send({ msg: err.message });
-    });
-});
-
-//logs show
-app.get("/logs/:id", async (req, res) => {
-  try {
-    const log = await Log.findById(req.params.id);
-
-    res.render("Show", { log: log });
-  } catch (error) {
-    console.log(error);
-  }
-});
+//resource routes
+//logs resource route(logs resource route means REST routes pertaining to /logs grouped together)
+app.use("/logs", logsController); // tells server.js to import the routes from file that logsController gets set to
 
 //listen on port 3000
 app.listen(3000, () => {
