@@ -28,6 +28,9 @@ mongoose.connection.once("open", () => {
   console.log("connected to mongo");
 });
 
+//models
+const Log = require("./models/logs.js");
+
 //routes
 //homepage route
 app.get("/", (req, res) => {
@@ -35,9 +38,10 @@ app.get("/", (req, res) => {
 });
 
 //logs index
-app.get("/logs/", async (req, res) => {
+app.get("/logs", async (req, res) => {
   try {
-    res.send("Index");
+    const logs = await Log.find();
+    res.render("Index", { logs: logs });
   } catch (error) {
     console.error(error);
   }
@@ -58,7 +62,22 @@ app.post("/logs", async (req, res) => {
       //if ready to eat is not checked by user
       req.body.shipIsBroken = false; //do some data correction
     }
-    res.send(req.body);
+
+    //store new log in cloud db
+    await Log.create(req.body);
+
+    res.render("Show", { log: req.body }); //redirect to show route
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//logs show
+app.get("/logs/:id", async (req, res) => {
+  try {
+    const log = await Log.findById(req.params.id);
+
+    res.render("Show", { log: log });
   } catch (error) {
     console.log(error);
   }
