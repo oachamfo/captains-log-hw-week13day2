@@ -11,7 +11,8 @@ class New extends React.Component {
         </nav>
         <h1>New Captain's Log page</h1>
         <form action="/logs" method="POST">
-          Title: <input type="text" name="title" />
+          Title:{" "}
+          <input type="text" name="title" defaultValue="Captain's log title" />
           <br />
           Entry: <br></br>
           <textarea
