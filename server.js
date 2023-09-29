@@ -48,6 +48,22 @@ app.get("/logs/new", (req, res) => {
   res.render("New");
 });
 
+//logs create
+app.post("/logs", async (req, res) => {
+  try {
+    if (req.body.shipIsBroken === "on") {
+      //if ready to eat is checked by user
+      req.body.shipIsBroken = true; //do some data correction
+    } else {
+      //if ready to eat is not checked by user
+      req.body.shipIsBroken = false; //do some data correction
+    }
+    res.send(req.body);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 //listen on port 3000
 app.listen(3000, () => {
   console.log("listening");
