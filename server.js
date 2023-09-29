@@ -34,6 +34,20 @@ app.get("/", (req, res) => {
   res.send("Welcome to Captain's Log App");
 });
 
+//logs index
+app.get("/logs/", async (req, res) => {
+  try {
+    res.send("Index");
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+//logs new
+app.get("/logs/new", (req, res) => {
+  res.render("New");
+});
+
 //listen on port 3000
 app.listen(3000, () => {
   console.log("listening");
