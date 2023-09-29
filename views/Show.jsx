@@ -2,7 +2,7 @@ const React = require("react");
 
 class Show extends React.Component {
   createdOn() {
-    //stringify MongoDb time stamp object and return human readable date
+    //stringify MongoDb time stamp createdAt object and return human readable date
     const createdAtMonth = JSON.stringify(
       this?.props?.log?.createdAt?.getMonth() + 1
     );
@@ -10,19 +10,22 @@ class Show extends React.Component {
     const createdAtYear = JSON.stringify(
       this?.props?.log?.createdAt?.getFullYear()
     );
-
+    //declare createdAt
     let createdAt;
 
     if (!createdAtMonth || !createdAtDay || !createdAtYear) {
       createdAt = "Nothing to display";
     } else {
+      this.displayCreatedAt = true;
+
+      //concatenate month + day + year using a slash as a delimeter in the string
       createdAt = createdAtMonth + "/" + createdAtDay + "/" + createdAtYear;
     }
     return createdAt;
   }
 
   updatedOn() {
-    //stringify MongoDb time stamp object and return human readable date
+    //stringify MongoDb time stamp updatedAt object and return human readable date
     const updatedAtMonth = JSON.stringify(
       this?.props?.log?.updatedAt?.getMonth() + 1
     );
@@ -31,10 +34,13 @@ class Show extends React.Component {
       this?.props?.log?.updatedAt?.getFullYear()
     );
 
+    //declare updatedAt
     let updatedAt;
+
     if (!updatedAtMonth || !updatedAtDay || !updatedAtYear) {
       updatedAt = "Nothing to display";
     } else {
+      //concatenate month + day + year using a slash as a delimeter in the string
       updatedAt = updatedAtMonth + "/" + updatedAtDay + "/" + updatedAtYear;
     }
     return updatedAt;
@@ -58,8 +64,18 @@ class Show extends React.Component {
         <br></br>
         <p>{this?.props?.log?.entry}</p>
         <br></br>
-        <p>created on: {this.createdOn()}</p>
-        <p>updated on: {this.updatedOn()}</p>
+
+        {/* conditional rendering of created on and updated on strings */}
+        <p>
+          {this.props.log.createdAt
+            ? "created on: " + `${this.createdOn()}`
+            : " "}
+        </p>
+        <p>
+          {this.props.log.updatedAt
+            ? "updated on: " + `${this.updatedOn()}`
+            : " "}
+        </p>
       </div>
     );
   }
