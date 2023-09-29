@@ -13,7 +13,13 @@ class New extends React.Component {
         <form action="/logs" method="POST">
           Title: <input type="text" name="title" />
           <br />
-          Entry: <input type="textarea" name="entry" />
+          Entry: <br></br>
+          <textarea
+            name="entry"
+            rows="4"
+            cols="50"
+            defaultValue="Please type your Captain's log entry here."
+          />
           <br />
           Ship is Broken: <input type="checkbox" name="shipIsBroken" />
           <br />

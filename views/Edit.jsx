@@ -17,8 +17,14 @@ class Edit extends React.Component {
           Title:{" "}
           <input type="text" name="title" defaultValue={this.props.log.title} />
           <br />
-          Entry:{" "}
-          <input type="text" name="entry" defaultValue={this.props.log.entry} />
+          Entry: <br />
+          <textarea
+            type="text"
+            name="entry"
+            rows="4"
+            cols="50"
+            defaultValue={this.props.log.entry}
+          />
           <br />
           Ship is Broken:
           {this.props.log.shipIsBroken ? (
