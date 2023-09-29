@@ -62,6 +62,23 @@ try {
   console.log(error);
 }
 
+//logs update
+app.put("/logs/:id", (req, res) => {
+  if (req.body.shipIsBroken === "on") {
+    req.body.shipIsBroken = true;
+  } else {
+    req.body.shipIsBroken = false;
+  }
+  Log.findByIdAndUpdate(req.params.id, req.body)
+    .then((updatedLog) => {
+      console.log(updatedLog);
+      res.redirect(`/logs/${req.params.id}`); //redirect to the Show page
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+});
+
 //logs create
 app.post("/logs", async (req, res) => {
   try {
@@ -80,6 +97,19 @@ app.post("/logs", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+//logs edit
+app.get("/logs/:id/edit", async (req, res) => {
+  await Log.findById(req.params.id)
+    .then((foundLog) => {
+      res.render("Edit", {
+        log: foundLog, //pass in the foundLog so we can use it to populate the form
+      });
+    })
+    .catch((err) => {
+      res.send({ msg: err.message });
+    });
 });
 
 //logs show
