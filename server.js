@@ -37,6 +37,32 @@ app.get("/", (req, res) => {
   res.send("Welcome to Captain's Log App");
 });
 
+//seed route
+app.get("/logs/seed", (req, res) => {
+  Log.create([
+    {
+      title: "title1",
+      entry: "entry1",
+      shipIsBroken: true,
+    },
+    {
+      title: "title2",
+      entry: "entry2",
+      shipIsBroken: false,
+    },
+    {
+      title: "title3",
+      entry: "entry3",
+    },
+  ])
+    .then(() => {
+      res.redirect("/logs");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
 //logs index
 app.get("/logs", async (req, res) => {
   try {
