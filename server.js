@@ -52,6 +52,16 @@ app.get("/logs/new", (req, res) => {
   res.render("New");
 });
 
+//logs delete
+try {
+  app.delete("/logs/:id", async (req, res) => {
+    await Log.findByIdAndRemove(req.params.id);
+    res.redirect("/logs"); //redirect back to logs index
+  });
+} catch (error) {
+  console.log(error);
+}
+
 //logs create
 app.post("/logs", async (req, res) => {
   try {
