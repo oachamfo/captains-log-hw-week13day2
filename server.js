@@ -41,7 +41,7 @@ app.get("/", (req, res) => {
 });
 
 //resource routes
-//logs resource route(logs resource route means REST routes pertaining to /logs grouped together)
+//logs resource route(logs resource route here means REST routes pertaining to /logs grouped together)
 app.use("/logs", logsController); // tells server.js to import the routes from file that logsController gets set to
 
 //listen on port 3000
